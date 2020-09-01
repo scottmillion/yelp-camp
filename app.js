@@ -21,6 +21,36 @@ const campgrounds = [
     image:
       "https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80",
   },
+  {
+    name: "Salmon Creek",
+    image:
+      "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
+  },
+  {
+    name: "Tallgreen Highlands",
+    image:
+      "https://images.unsplash.com/photo-1532339142463-fd0a8979791a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
+  },
+  {
+    name: "Green Hills",
+    image:
+      "https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80",
+  },
+  {
+    name: "Green Hills",
+    image:
+      "https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80",
+  },
+  {
+    name: "Salmon Creek",
+    image:
+      "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
+  },
+  {
+    name: "Tallgreen Highlands",
+    image:
+      "https://images.unsplash.com/photo-1532339142463-fd0a8979791a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
+  }
 ];
 
 
@@ -39,8 +69,8 @@ app.get("/campgrounds", (req, res) => {
 
 app.post("/campgrounds", (req, res) => {
   //get data from form and add to campgrounds array.
-  const name = req.body.name; // req.body comes from body-parser
-  const image = req.body.image; // req.body comes from body-parser
+  const name = req.body.name; // req.body accessible because of body-parser
+  const image = req.body.image; // req.body accessible because of body-parser
   campgrounds.push({ name, image }); // object destructuring... name: name, image: image.
   //redirect to campgrounds page.
   res.redirect("/campgrounds"); // default redirect is a get request.
