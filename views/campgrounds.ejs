@@ -1,6 +1,10 @@
-<ul>
-  <% campgrounds.forEach((campground) => { %>
-  <li><%= campground.name %></li>
-  <li><img src="<%= campground.image %>" width="300px" height="200px" /></li>
-  <% }) %>
-</ul>
+<%- include("partials/header") %>
+
+<h1>This is the Campgrounds Page!</h1>
+
+<% campgrounds.forEach((campground) => { %>
+<div>
+  <h4><%= campground.name %></h4>
+  <img src="<%= campground.image %>" width="300px" height="200px" />
+</div>
+<% }) %> <%- include("partials/footer") %>
