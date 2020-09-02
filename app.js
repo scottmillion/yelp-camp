@@ -28,14 +28,6 @@ const Campground = mongoose.model('Campground', campgroundSchema);
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
-
-
-// Campground.create({
-//   name: "Green Hills",
-//   image: "https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80",
-//   description: "Who needs blue or white or yellow? We got nothin' but green here."
-// });
-
 // routes
 app.get("/", (req, res) => {
   res.render("landing");
