@@ -1,85 +1,73 @@
-const express = require("express");
-const app = express();
-const bodyParser = require("body-parser");
+// setup express, body-parser
+const express = require("express"),
+  app = express(),
+  bodyParser = require("body-parser");
 
+// mongoose setup
+const mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost:27017/yelp-camp', {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+  .then(() => console.log('Connected to DB!'))
+  .catch(error => console.log(error.message));
+
+// mongoose create Schema
+const campgroundSchema = new mongoose.Schema({
+  name: String,
+  image: String
+
+});
+
+// mongoose give Schema and CRUD methods to Campground
+// Campground.create(), Campground.find() Campground.remove(), etc.
+const Campground = mongoose.model('Campground', campgroundSchema);
+
+// use and set
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
-const campgrounds = [
-  {
-    name: "Salmon Creek",
-    image:
-      "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
-  },
-  {
-    name: "Tallgreen Highlands",
-    image:
-      "https://images.unsplash.com/photo-1532339142463-fd0a8979791a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
-  },
-  {
-    name: "Green Hills",
-    image:
-      "https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80",
-  },
-  {
-    name: "Salmon Creek",
-    image:
-      "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
-  },
-  {
-    name: "Tallgreen Highlands",
-    image:
-      "https://images.unsplash.com/photo-1532339142463-fd0a8979791a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
-  },
-  {
-    name: "Green Hills",
-    image:
-      "https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80",
-  },
-  {
-    name: "Green Hills",
-    image:
-      "https://images.unsplash.com/photo-1571863533956-01c88e79957e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=967&q=80",
-  },
-  {
-    name: "Salmon Creek",
-    image:
-      "https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
-  },
-  {
-    name: "Tallgreen Highlands",
-    image:
-      "https://images.unsplash.com/photo-1532339142463-fd0a8979791a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80",
-  }
-];
-
-
+// routes
 app.get("/", (req, res) => {
   res.render("landing");
 });
 
-// NOTE!!! REST Api follows this format (google for more info)
-// A get and post with same path "/campgrounds". A redirect to "/campgrounds" from post route.
-// A "/campgrounds/new" get route. /new being the standard.
-
-
 app.get("/campgrounds", (req, res) => {
-  res.render("campgrounds", { campgrounds: campgrounds });
+  // Passing campgrounds array of objects from database to campgrounds.ejs view
+  Campground.find({}, (err, allCampgrounds) => {
+    if (err) {
+      console.log("Oh no, 'find' error!");
+      console.log(err);
+    } else {
+      res.render("campgrounds", { campgrounds: allCampgrounds });
+    }
+  });
 });
 
 app.post("/campgrounds", (req, res) => {
-  //get data from form and add to campgrounds array.
-  const name = req.body.name; // req.body accessible because of body-parser
-  const image = req.body.image; // req.body accessible because of body-parser
-  campgrounds.push({ name, image }); // object destructuring... name: name, image: image.
-  //redirect to campgrounds page.
-  res.redirect("/campgrounds"); // default redirect is a get request.
+  // get data from form and store it in an object
+  // Note: req.body accessible b/c of body-parser
+  const name = req.body.name;
+  const image = req.body.image;
+  // good object destructuring example. { name: name, image: image }
+  const newCampground = { name, image }
+
+  // passing newCampground object to mongodb using mongoose syntax
+  Campground.create(newCampground, (err, newlyCreated) => {
+    if (err) {
+      console.log(err);
+    } else {
+      // Redirect to campgrounds page. The default redirect is a GET request.
+      res.redirect("/campgrounds");
+    }
+  });
 });
 
 app.get("/campgrounds/new", (req, res) => {
   res.render("new");
 });
 
+// remember to change this when hosted off your local machine
 app.listen(3000, (req, res) => {
   console.log("Server running on 3000, sir!");
 });
