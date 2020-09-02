@@ -53,7 +53,7 @@ app.post("/campgrounds", (req, res) => {
   const name = req.body.name;
   const image = req.body.image;
   const description = req.body.description;
-  // good object destructuring example. { name: name, image: image }
+  // good object destructuring example. { name: name, image: image, description: description }
   const newCampground = { name, image, description }
 
   // passing newCampground object to mongodb using mongoose syntax
